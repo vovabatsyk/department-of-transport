@@ -1,14 +1,14 @@
 <template>
   <div align="center" class="pa-5">
-    <v-form @submit.prevent="submitHandler">
+    <v-form @submit.prevent="submitHandler" ref="form">
     <v-card class="pa-5" max-width="600">
         <v-text-field
-                v-model="title"
+                v-model.trim="title"
                 label="Назва"
                 :rules="titleRules"
         ></v-text-field>
         <v-textarea
-                v-model="text"
+                v-model.trim="text"
                 :rules="textRules"
                 filled
                 label="Фабула"
@@ -42,14 +42,16 @@
         methods: {
             async submitHandler() {
                 try {
-                    await this.$store.dispatch('createPost', {
-                        title: this.title,
-                        text: this.text,
-                        date: new Date().toJSON(),
-                        userId: this.userId
-                    })
-                    this.title = ''
-                    this.text = ''
+                    if (this.$refs.form.validate()) {
+                        await this.$store.dispatch('createPost', {
+                            title: this.title,
+                            text: this.text,
+                            date: new Date().toJSON(),
+                            userId: this.userId
+                        })
+                        this.$router.push('/posts')
+                    }
+
                 } catch (e) {
                 }
             }

@@ -10,23 +10,26 @@
 
     >
       <v-text-field
-              v-model="email"
-              :rules="emailRules"
+              v-model.trim="email"
+              :error-messages="emailErrors"
+              @input="$v.email.$touch()"
+              @blur="$v.email.$touch()"
               label="E-mail"
               required
       ></v-text-field>
 
 
       <v-text-field
-              v-model="password"
+              v-model.trim="password"
+              :error-messages="passwordErrors"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="passwordRules"
               :type="show1 ? 'text' : 'password'"
-              name="input-10-1"
               label="Пароль"
-              hint="Мінімум 6 символів"
               counter
               @click:append="show1 = !show1"
+              required
+              @input="$v.password.$touch()"
+              @blur="$v.password.$touch()"
       ></v-text-field>
 
       <v-btn
@@ -46,36 +49,55 @@
 </template>
 
 <script>
+    import {validationMixin} from 'vuelidate'
+    import {required, minLength, email} from 'vuelidate/lib/validators'
+
     export default {
+        mixins: [validationMixin],
+
+        validations: {
+            email: {required, email},
+            password: {required, minLength: minLength(6)}
+
+        },
         data: () => ({
             valid: true,
             email: '',
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-            ],
             show1: false,
-            password: '',
-            passwordRules: [
-                value => !!value || 'Заповніть.',
-                v => v.length >= 6 || 'Мінімум 6 символів'
-            ]
+            password: ''
         }),
-
+        computed: {
+            passwordErrors() {
+                const errors = []
+                if (!this.$v.password.$dirty) return errors
+                !this.$v.password.minLength && errors.push('Пароль повинен мати не менше 6 символів')
+                !this.$v.password.required && errors.push('Введіть пароль')
+                return errors
+            },
+            emailErrors() {
+                const errors = []
+                if (!this.$v.email.$dirty) return errors
+                !this.$v.email.email && errors.push('Введіть правельний e-mail')
+                !this.$v.email.required && errors.push('E-mail не може бути пустим')
+                return errors
+            }
+        },
         methods: {
             async submitHandler() {
-                this.$refs.form.validate()
+                if (this.$v.$invalid) {
+                    this.$v.$touch()
+                    return
+                }
                 const formData = {
                     email: this.email,
                     password: this.password
                 }
                 try {
                     await this.$store.dispatch('login', formData)
-                    console.log(formData)
                     this.$router.push('/posts')
+
                 } catch (e) {
                 }
-               
             }
         }
     }

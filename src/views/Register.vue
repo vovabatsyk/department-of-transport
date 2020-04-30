@@ -9,14 +9,14 @@
 
     >
       <v-text-field
-              v-model="email"
+              v-model.trim="email"
               :rules="emailRules"
               label="E-mail"
               required
       ></v-text-field>
 
       <v-text-field
-              v-model="name"
+              v-model.trim="name"
               :counter="10"
               :rules="nameRules"
               label="Ім'я"
@@ -25,7 +25,7 @@
 
 
       <v-text-field
-              v-model="password"
+              v-model.trim="password"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="passwordRules"
               :type="show1 ? 'text' : 'password'"
@@ -77,20 +77,19 @@
 
         methods: {
             async submitHandler() {
-                this.$refs.form.validate()
-                const formData = {
-                    email: this.email,
-                    password: this.password,
-                    name: this.name
-                }
-                console.log(formData)
-
                 try {
-                    await this.$store.dispatch('register', formData)
-                    this.$router.push('/posts')
+                    if (this.$refs.form.validate()) {
+                        const formData = {
+                            email: this.email,
+                            password: this.password,
+                            name: this.name
+                        }
+                        await this.$store.dispatch('register', formData)
+                        this.$router.push('/posts')
+                    }
                 } catch (e) {
                 }
-               
+
             }
         }
     }

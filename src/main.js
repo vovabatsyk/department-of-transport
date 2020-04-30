@@ -3,14 +3,16 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from '@/plugins/vuetify'
+import Vuelidate from 'vuelidate'
 import Loader from './components/Loader'
-
+import VueClipboard from 'vue-clipboard2'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 
 Vue.config.productionTip = false
-
+Vue.use(Vuelidate)
+Vue.use(VueClipboard)
 Vue.component('Loader', Loader)
 
 firebase.initializeApp({

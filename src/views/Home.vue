@@ -39,6 +39,7 @@
         }),
         async mounted() {
             this.posts = await this.$store.dispatch('fetchPosts')
+            // this.posts.reverse()
             this.loading = false
         }
     }

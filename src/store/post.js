@@ -1,6 +1,14 @@
 import firebase from 'firebase/app'
 
 export default {
+    state: {
+        post: {}
+    },
+    mutations: {
+        setPost(state, post) {
+            state.post = post
+        }
+    },
     actions: {
         async createPost({dispatch, commit}, post) {
             try {
@@ -19,13 +27,13 @@ export default {
                             .ref(`/posts`)
                             .once('value')
                     ).val() || {}
-                return Object.keys(posts).map(key => ({ ...posts[key], id: key }))
+                return Object.keys(posts).map(key => ({...posts[key], id: key}))
             } catch (e) {
                 commit('setError', e)
                 throw e
             }
         },
-        async fetchRecordById({ dispatch, commit }, id) {
+        async fetchRecordById({dispatch, commit}, id) {
             try {
                 const record =
                     (
@@ -35,23 +43,40 @@ export default {
                             .child(id)
                             .once('value')
                     ).val() || {}
-                return { ...record, id }
+                return {...record, id}
             } catch (e) {
                 commit('setError', e)
                 throw e
             }
         },
-        async updatePost({ commit, dispatch }, { title, text, id }) {
+        async updatePost({dispatch, commit, getters}, {title, text, id}) {
             try {
+                // const updateData = { ...getters.post, ...toUpdate }
                 await firebase
                     .database()
-                    .ref(`/posts/`)
-                    .child(id)
-                    .update({ title, text })
+                    .ref(`/posts/${id}`)
+                    .update({title, text})
+                // commit('setPost', updateData)
             } catch (e) {
                 commit('setError', e)
                 throw e
             }
         },
+        async deletePost({commit}, id) {
+            try {
+                const record =
+
+                    await firebase
+                        .database()
+                        .ref(`/post`).child(id).remove()
+
+            } catch (e) {
+                commit('setError', e)
+                throw e
+            }
+        }
+    },
+    getters: {
+        post: s => s.post
     }
 }

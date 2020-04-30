@@ -2,22 +2,22 @@
   <div align="center" class="pa-5">
     <Loader v-if="loading"/>
     <v-card v-else class="pa-5" max-width="600">
-      <v-form @submit.prevent="submitHandler">
+      <v-form @submit.prevent="submitHandler " ref="form">
         <v-text-field
-                v-model="title"
+                v-model.trim="title"
                 id="name"
-                ref="newTitle"
                 label="Назва"
                 :rules="rules"
                 hide-details="auto">
         </v-text-field>
         <v-textarea
-                v-model="text"
+                v-model.trim="text"
                 :rules="rules"
                 hide-details="auto"
                 filled
                 label="Фабула"
                 auto-grow
+                class="mb-3"
         ></v-textarea>
         <v-btn @click.prevent="" class="mr-5" @click="$router.push('/post/' + post.id)">Назад</v-btn>
 
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
+
     export default {
         data: () => ({
             rules: [
@@ -35,10 +37,11 @@
                 value => (value && value.length >= 3) || 'Мінімум 3 символа'
             ],
             id: '',
-            post: '',
             loading: true,
+            post: '',
             title: '',
-            text: ''
+            text: '',
+            userId: ''
         }),
         async mounted() {
             this.id = this.$route.params.id
@@ -47,19 +50,23 @@
             this.text = this.post.text
             this.loading = false
         },
+
         methods: {
+            ...mapActions(['updatePost']),
             async submitHandler() {
-               try {
-                   const formData = {
-                       newTitle: this.title,
-                       newText: this.text,
-                       id: this.post.id
-                   }
-                   console.log(formData)
-                   await this.$store.dispatch('updatePost', formData)
-               } catch (e) {
-                   console.error(e)
-               }
+                try {
+                    if (this.$refs.form.validate()) {
+                        await this.updatePost({
+                            title: this.title,
+                            text: this.text,
+                            id: this.id
+                        })
+                        this.$router.push(`/post/${this.id}`)
+                    }
+
+                } catch (e) {
+                    console.error(e)
+                }
             }
         }
     }
