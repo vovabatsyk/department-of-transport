@@ -31,6 +31,11 @@
     import {mapActions} from 'vuex'
 
     export default {
+        metaInfo() {
+            return {
+                title: this.$title('Редагувати')
+            }
+        },
         data: () => ({
             rules: [
                 value => !!value || 'Введіть текст',
@@ -59,6 +64,7 @@
                         await this.updatePost({
                             title: this.title,
                             text: this.text,
+                            date: new Date().toJSON(),
                             id: this.id
                         })
                         this.$router.push(`/post/${this.id}`)

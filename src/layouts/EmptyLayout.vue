@@ -3,7 +3,7 @@
 
     <v-content>
       <v-container
-              class="fill-height"
+              class="fill-height bg"
               fluid
       >
         <v-row
@@ -45,7 +45,7 @@
             timeout: 4000
         }),
         created() {
-            this.$vuetify.theme.dark = true
+            this.$vuetify.theme.dark = false
         },
         computed: {
             error() {
@@ -61,5 +61,11 @@
         }
     }
 </script>
+
+<style scoped>
+ .bg {
+   background: #fff;
+ }
+</style>
 
 

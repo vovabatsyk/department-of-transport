@@ -15,9 +15,7 @@
                   :key="i"
                   @click="$router.push('/post/' + post.id)"
           >
-            <v-list-item-icon>
-              <v-icon v-text="i + 1"></v-icon>
-            </v-list-item-icon>
+            <v-subheader>{{i + 1}}</v-subheader>
             <v-list-item-content>
               <v-list-item-title>{{post.title}}</v-list-item-title>
             </v-list-item-content>
@@ -31,6 +29,11 @@
 <script>
 
     export default {
+        metaInfo() {
+            return {
+                title: this.$title('Записи')
+            }
+        },
         name: 'Home',
         data: () => ({
             loading: true,
@@ -39,7 +42,7 @@
         }),
         async mounted() {
             this.posts = await this.$store.dispatch('fetchPosts')
-            // this.posts.reverse()
+            this.posts.reverse()
             this.loading = false
         }
     }

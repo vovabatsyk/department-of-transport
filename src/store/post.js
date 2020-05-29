@@ -49,14 +49,12 @@ export default {
                 throw e
             }
         },
-        async updatePost({dispatch, commit, getters}, {title, text, id}) {
+        async updatePost({dispatch, commit, getters}, {title, text, id , date}) {
             try {
-                // const updateData = { ...getters.post, ...toUpdate }
                 await firebase
                     .database()
                     .ref(`/posts/${id}`)
-                    .update({title, text})
-                // commit('setPost', updateData)
+                    .update({title, text, date})
             } catch (e) {
                 commit('setError', e)
                 throw e
@@ -64,11 +62,12 @@ export default {
         },
         async deletePost({commit}, id) {
             try {
-                const record =
 
-                    await firebase
-                        .database()
-                        .ref(`/post`).child(id).remove()
+               const post = await firebase
+                    .database()
+                    .ref(`/post/`).child(id)
+                post.remove()
+                                console.log("post" , post)
 
             } catch (e) {
                 commit('setError', e)

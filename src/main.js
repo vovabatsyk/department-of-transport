@@ -2,10 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import VueMeta from 'vue-meta'
+import titlePlugin from './plugins/title.plugin'
+
 import vuetify from '@/plugins/vuetify'
 import Vuelidate from 'vuelidate'
 import Loader from './components/Loader'
 import VueClipboard from 'vue-clipboard2'
+import dateFilter from './filters/data.filter'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
@@ -13,6 +17,9 @@ import 'firebase/database'
 Vue.config.productionTip = false
 Vue.use(Vuelidate)
 Vue.use(VueClipboard)
+Vue.use(VueMeta)
+Vue.use(titlePlugin)
+Vue.filter('date', dateFilter)
 Vue.component('Loader', Loader)
 
 firebase.initializeApp({

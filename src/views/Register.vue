@@ -55,6 +55,11 @@
 
 <script>
     export default {
+        metaInfo() {
+            return {
+                title: this.$title('Реєстрація')
+            }
+        },
         data: () => ({
             valid: true,
             email: '',

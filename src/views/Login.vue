@@ -53,6 +53,11 @@
     import {required, minLength, email} from 'vuelidate/lib/validators'
 
     export default {
+        metaInfo() {
+            return {
+                title: this.$title('Вхід')
+            }
+        },
         mixins: [validationMixin],
 
         validations: {

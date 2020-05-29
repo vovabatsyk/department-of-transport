@@ -1,9 +1,19 @@
 <template>
-  <v-col class="col-md-4 col-sm-8">
-    <v-img src="https://opendata.city-adm.lviv.ua/uploads/group/2017-07-11-120004.149490LMRlogo.png" aspect-ratio="2.0"
-           contain></v-img>
-    <router-link to="posts">Start</router-link>
-  </v-col>
-
+  <div>
+    <v-row>
+      <img src="../assets/LMR_logo.png">
+    </v-row>
+    <v-row justify="center">
+      <v-btn class="ma-2" color="blue darken-4" @click="$router.push('/posts')" dark>Ввійти
+        <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+      </v-btn>
+    </v-row>
+  </div>
 </template>
+<style scoped>
+  img {
+    width: 100%;
+    max-width: 320px;
+  }
+</style>
 

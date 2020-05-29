@@ -23,6 +23,11 @@
 
 <script>
     export default {
+        metaInfo() {
+            return {
+                title: this.$title('Додати')
+            }
+        },
         data: () => ({
             title: '',
             titleRules: [

@@ -24,7 +24,7 @@
 
       <v-card-text class="font-weight-medium text-justify">
         {{post.text}}
-        <p><small>{{post.date}}</small></p>
+        <p><small>{{post.date | date('datetime')}}</small></p>
 
       </v-card-text>
 
@@ -37,7 +37,7 @@
           >
             <v-btn class="mr-5" v-show="show" color="primary" @click="editPost">змінити</v-btn>
 
-            <v-btn v-show="show" disabled color="error" @click.stop="dialog = true">видалити</v-btn>
+            <v-btn v-show="disabled" color="error" @click.stop="dialog = true">видалити</v-btn>
           </v-row>
         </v-list-item>
       </v-card-actions>
@@ -90,6 +90,11 @@
 
 <script>
     export default {
+        metaInfo() {
+            return {
+                title: this.$title('Запис')
+            }
+        },
         data: () => ({
             dialog: false,
             snackbar: false,
@@ -100,7 +105,8 @@
             show: false,
             userId: '',
             owner: '',
-            message: ''
+            message: '',
+            disabled: false
 
         }),
         computed: {
